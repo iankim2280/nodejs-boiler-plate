@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 import { User } from "./models/User";
 import "./middlewares/db";
 dotenv.config();
@@ -14,6 +15,7 @@ app.get("/", (req, res) => res.send("hello world"));
 app.use(bodyParser.urlencoded({ extended: true }));
 // application/json
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 app.post("/signup", (req, res) => {
   // 회원 가입 할 떄 필요한 정보들을 client를 가져오면 그것들을 데이터베이스에 넣어준다.

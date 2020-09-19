@@ -35,7 +35,7 @@ const userSchema = mongoose.Schema({
 });
 
 userSchema.pre("save", function (next) {
-  var user = this;
+  let user = this;
   if (user.isModified("password")) {
     // 비밀번호를 암호화
     bcrypt.genSalt(saltRounder, (err, salt) => {
@@ -59,8 +59,8 @@ userSchema.methods.comparePassword = function (plainPassword, callBack) {
 };
 
 userSchema.methods.generateToken = function (callBack) {
-  var user = this;
-  var token = jwt.sign(user._id.toHexString(), "secretToken");
+  let user = this;
+  let token = jwt.sign(user._id.toHexString(), "secretToken");
   user.token = token;
   user.save(function (err, user) {
     if (err) return cd(err);
@@ -69,7 +69,7 @@ userSchema.methods.generateToken = function (callBack) {
 };
 
 userSchema.statics.findByToken = function (token, callBack) {
-  var user = this;
+  let user = this;
   jwt.verify(token, "secretToken", function (err, decoded) {
     user.findOne({ _id: decoded, token: token }, function (err, user) {
       if (err) return callBack(err);
