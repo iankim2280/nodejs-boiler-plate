@@ -70,9 +70,12 @@ userSchema.methods.generateToken = function (callBack) {
 
 userSchema.statics.findByToken = function (token, callBack) {
   let user = this;
+  // decode tokens
   jwt.verify(token, "secretToken", function (err, decoded) {
+    // find users with user._id then compare token that came from client to DB's
     user.findOne({ _id: decoded, token: token }, function (err, user) {
       if (err) return callBack(err);
+      // if there's no error return user info
       callBack(null, user);
     });
   });

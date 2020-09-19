@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import { User } from "./models/User";
 import "./middlewares/db";
+import auth from "./middlewares/auth";
 dotenv.config();
 const app = express();
 const { PORT } = process.env;
@@ -17,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-app.post("/signup", (req, res) => {
+app.post("/api/users/signup", (req, res) => {
   // 회원 가입 할 떄 필요한 정보들을 client를 가져오면 그것들을 데이터베이스에 넣어준다.
   const user = new User(req.body);
 
@@ -30,7 +31,7 @@ app.post("/signup", (req, res) => {
   });
 });
 
-app.post("/login", (req, res) => {
+app.post("/api/users/login", (req, res) => {
   // 1. 요청된 이메일을 데이터베이스에서 있는지 찾는다.
   User.findOne({ email: req.body.email }, (err, user) => {
     if (!user) {
@@ -58,8 +59,21 @@ app.post("/login", (req, res) => {
   });
 });
 
+app.post("/api/users/auth", auth, (req, res) => {
+  res.status(200).json({
+    _id: req.user._id,
+    isAuth: true,
+    firstname: req.user.firstname,
+    lastname: req.user.lastname,
+    email: req.user.email,
+    isAdmin: req.user.role === "ADMIN" ? false : true,
+    role: req.user.role,
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Airbnb server is listening on http://localhost:${PORT}`);
 });
 
 export default app;
+// why do I use authentication? only authenticated users can use the app properly.
