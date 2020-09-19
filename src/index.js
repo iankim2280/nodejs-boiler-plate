@@ -1,14 +1,14 @@
 import express from "express";
 import dotenv from "dotenv";
-import middleWares from "./middlewares";
+// import middleWares from "./middlewares";
 import bodyParser from "body-parser";
 import { User } from "./models/User";
-
+import mongoose from "mongoose";
+import config from "./config/key";
+import "./middlewares/db";
 dotenv.config();
 const app = express();
 const { PORT } = process.env;
-
-middleWares(app);
 
 // when you open the localhost on browser
 app.get("/", (req, res) => res.send("hello world"));
