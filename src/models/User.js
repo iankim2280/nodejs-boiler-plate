@@ -1,6 +1,7 @@
-import { Schema, mongoose } from "mongoose";
+// const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const userSchema = Schema({
+const userSchema = mongoose.Schema({
   firstname: {
     type: String,
     maxlength: 30,
@@ -15,6 +16,9 @@ const userSchema = Schema({
     unique: true,
     required: [true, "Please provide your email"],
   },
+  password: {
+    type: String,
+  },
   role: {
     type: String,
     enum: ["USER", "ADMIN"],
@@ -27,5 +31,6 @@ const userSchema = Schema({
   tokenExp: Number,
 });
 
-const User = model("User", userSchema);
-export default User;
+const User = mongoose.model("User", userSchema);
+module.exports = { User };
+// export default mongoose.model("User", userSchema);?
