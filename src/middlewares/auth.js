@@ -8,17 +8,14 @@ let auth = (req, res, next) => {
 
   // recover tokens, find users
 
-  User.findbyToken(token, (err, user) => {
+  User.findByToken(token, (err, user) => {
     if (err) throw err;
     if (!user) return res.json({ isAuth: false, error: true });
-
     // if(user) auth == okay
     req.token = token;
     req.user = user;
-
     // finish middleware, go to the next step
     next();
-
     // if(!user) auth == no
   });
 };
