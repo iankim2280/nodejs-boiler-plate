@@ -3,8 +3,9 @@ import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import { User } from "./models/User";
+// const { auth } = require("./middlewares/auth");
+import { auth } from "./middlewares/auth";
 import "./middlewares/db";
-import auth from "./middlewares/auth";
 dotenv.config();
 const app = express();
 const { PORT } = process.env;
@@ -59,20 +60,28 @@ app.post("/api/users/login", (req, res) => {
   });
 });
 
-app.post("/api/users/auth", auth, (req, res) => {
+app.get("/api/users/auth", auth, (req, res) => {
   res.status(200).json({
     _id: req.user._id,
     isAuth: true,
     firstname: req.user.firstname,
     lastname: req.user.lastname,
     email: req.user.email,
-    isAdmin: req.user.role === "ADMIN" ? false : true,
-    role: req.user.role,
+    isAdmin: req.user.role === "USER" ? false : true,
+  });
+});
+
+app.get("/api/users/logout", auth, (req, res) => {
+  User.findOneAndUpdate({ _id: req.user._id }, { token: "" }, (err, user) => {
+    if (err) return res.json({ success: false, err });
+    return res.status(200).send({
+      success: true,
+    });
   });
 });
 
 app.listen(PORT, () => {
-  console.log(`Airbnb server is listening on http://localhost:${PORT}`);
+  console.log(`Server is listening on http://localhost:${PORT}`);
 });
 
 export default app;

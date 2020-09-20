@@ -63,7 +63,7 @@ userSchema.methods.generateToken = function (callBack) {
   let token = jwt.sign(user._id.toHexString(), "secretToken");
   user.token = token;
   user.save(function (err, user) {
-    if (err) return cd(err);
+    if (err) return callBack(err);
     callBack(null, user);
   });
 };
@@ -73,6 +73,7 @@ userSchema.statics.findByToken = function (token, callBack) {
   // decode tokens
   jwt.verify(token, "secretToken", function (err, decoded) {
     // find users with user._id then compare token that came from client to DB's
+
     user.findOne({ _id: decoded, token: token }, function (err, user) {
       if (err) return callBack(err);
       // if there's no error return user info

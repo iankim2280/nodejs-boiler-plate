@@ -1,4 +1,5 @@
-import User from "../models/User";
+// import User from "../models/User";
+const { User } = require("../models/User");
 
 let auth = (req, res, next) => {
   //인증 처리하는곳
@@ -6,6 +7,7 @@ let auth = (req, res, next) => {
   let token = req.cookies.x_auth;
 
   // recover tokens, find users
+
   User.findbyToken(token, (err, user) => {
     if (err) throw err;
     if (!user) return res.json({ isAuth: false, error: true });
@@ -20,4 +22,5 @@ let auth = (req, res, next) => {
     // if(!user) auth == no
   });
 };
-export default auth;
+// export default auth;
+module.exports = { auth };
