@@ -1,7 +1,7 @@
 This project was built with NodeJS, ExpressJS, MongoDB
 
 - [x] initialize server setting with babel - Login, Register, Authentication, Logout
-- [x] applied middlewares, bcrypt, token, cookie
+- [x] applied middlewares, bcrypt, cookie, JWT webtoken
 
 ##To use this application,
 
